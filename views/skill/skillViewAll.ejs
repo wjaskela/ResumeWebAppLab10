@@ -1,15 +1,15 @@
 <html>
     <head>
-        <title>Accounts</title>
+        <title>Skills</title>
     </head>
     <body>
-        <h1>Accounts</h1>
+        <h1>Skills</h1>
         <table border="1">
-            <tr><th>Account ID</th><th>Name</th><th>address_id</th></tr>
+            <tr><th>Skill ID</th><th>Name</th><th>address_id</th></tr>
             <% for(var i=0; result.length > i; i++ ) { %>
             <tr>
-                <td><%= result[i].account_id%></td>
-                <td><a href="/account/?account_id=<%= result[i].account_id %>"><%= result[i].account_name %></a></td>
+                <td><%= result[i].skill_id%></td>
+                <td><a href="/skill/?skill_id=<%= result[i].skill_id %>"><%= result[i].skill_name %></a></td>
                 <td><%= result[i].address_id %></td>
             </tr>
             <% } %>

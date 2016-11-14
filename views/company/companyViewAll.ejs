@@ -1,16 +1,15 @@
 <html>
     <head>
-        <title>Companys</title>
+        <title>Companies</title>
     </head>
     <body>
-        <h1>Companys</h1>
+        <h1>Companies</h1>
         <table border="1">
-            <tr><th>Company ID</th><th>Name</th><th>address_id</th></tr>
+            <tr><th>Company ID</th><th>Company Name</th></tr>
             <% for(var i=0; result.length > i; i++ ) { %>
             <tr>
                 <td><%= result[i].company_id%></td>
                 <td><a href="/company/?company_id=<%= result[i].company_id %>"><%= result[i].company_name %></a></td>
-                <td><%= result[i].address_id %></td>
             </tr>
             <% } %>
         </table>

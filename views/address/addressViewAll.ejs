@@ -5,12 +5,12 @@
     <body>
         <h1>Addresss</h1>
         <table border="1">
-            <tr><th>Address ID</th><th>Name</th><th>address_id</th></tr>
+            <tr><th>Address ID</th><th>Street</th><th>Zip Code</th></tr>
             <% for(var i=0; result.length > i; i++ ) { %>
             <tr>
                 <td><%= result[i].address_id%></td>
-                <td><a href="/address/?address_id=<%= result[i].address_id %>"><%= result[i].address_name %></a></td>
-                <td><%= result[i].address_id %></td>
+                <td><a href="/address/?address_id=<%= result[i].address_id %>"><%= result[i].street %></a></td>
+                <td><%= result[i].zip_code %></td>
             </tr>
             <% } %>
         </table>

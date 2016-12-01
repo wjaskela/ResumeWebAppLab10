@@ -5,7 +5,7 @@ var db  = require('./db_connection.js');
 var connection = mysql.createConnection(db.config);
 
 exports.getAll = function(callback) {
-    var query = 'SELECT * FROM resume;';
+    var query = 'SELECT * FROM resume_view;';
 
     connection.query(query, function(err, result) {
         callback(err, result);
@@ -13,7 +13,7 @@ exports.getAll = function(callback) {
 };
 
 exports.getById = function(resume_id, callback) {
-    var query = 'SELECT * FROM resume WHERE resume_id = ?';
+    var query = 'SELECT * FROM resume_view WHERE resume_id = ?';
     var queryData = [resume_id];
 
     connection.query(query, queryData, function(err, result) {

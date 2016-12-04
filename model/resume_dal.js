@@ -33,3 +33,12 @@ exports.insert = function(params, callback) {
     });
 
 };
+
+exports.delete = function(resume_id, callback) {
+    var query = 'DELETE FROM resume WHERE resume_id = ?';
+    var queryData = [resume_id];
+
+    connection.query(query, queryData, function(err, result) {
+        callback(err, result);
+    });
+};

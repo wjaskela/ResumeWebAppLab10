@@ -18,7 +18,7 @@
                 <td><a href="/school/?school_id=<%= result[i].school_id %>"><%= result[i].school_name %></a></td>
                 <td><%= result[i].street %>, <%= result[i].zip_code %></td>
                 <td><form action="/school/delete/">
-                        <input type="hidden" name="school_id" id="school_id" value="?id=<%= result[i].school_id %>" />
+                        <input type="hidden" name="school_id" id="school_id" value="<%= result[i].school_id %>" />
                         <input type="submit" value="Delete"/>
                     </form>
                 </td>

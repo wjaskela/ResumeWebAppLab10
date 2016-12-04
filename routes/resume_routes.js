@@ -33,4 +33,40 @@ router.get('/', function(req, res){
     }
 });
 
+// Return the add a new resume form
+router.get('/add', function(req, res){
+    // passing all the query parameters (req.query) to the insert function instead of each individually
+    resume_dal.getAll(function(err,result) {
+        if (err) {
+            res.send(err);
+        }
+        else {
+            res.render('resume/resumeAdd', {'account': result});
+        }
+    });
+});
+
+// View the resume for the given id
+router.get('/insert', function(req, res){
+    // simple validation
+    if(req.query.resume_name == null) {
+        res.send('Resume Name must be provided.');
+    }
+    else if(req.query.account_id == null) {
+        res.send('An Account must be selected');
+    }
+    else {
+        // passing all the query parameters (req.query) to the insert function instead of each individually
+        resume_dal.insert(req.query, function(err,result) {
+            if (err) {
+                res.send(err);
+            }
+            else {
+                //poor practice, but we will handle it differently once we start using Ajax
+                res.redirect(302, '/resume/all');
+            }
+        });
+    }
+});
+
 module.exports = router;

@@ -20,3 +20,16 @@ exports.getById = function(resume_id, callback) {
         callback(err, result);
     });
 };
+
+exports.insert = function(params, callback) {
+    var query = 'INSERT INTO resume (resume_name, account_id) VALUES (?, ?)';
+
+    // the question marks in the sql query above will be replaced by the values of the
+    // the data in queryData
+    var queryData = [params.resume_name, params.account_id];
+
+    connection.query(query, queryData, function(err, result) {
+        callback(err, result);
+    });
+
+};

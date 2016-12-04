@@ -49,7 +49,7 @@ router.get('/add', function(req, res){
 // View the resume for the given id
 router.get('/insert', function(req, res){
     // simple validation
-    if(req.query.resume_name == null) {
+    if(req.query.resume_name == "") {
         res.send('Resume Name must be provided.');
     }
     else if(req.query.account_id == null) {

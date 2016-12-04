@@ -50,7 +50,7 @@ router.get('/add', function(req, res){
 // View the school for the given id
 router.get('/insert', function(req, res){
     // simple validation
-    if(req.query.school_name == null) {
+    if(req.query.school_name == "") {
         res.send('School Name must be provided.');
     }
     else if(req.query.address_id == null) {

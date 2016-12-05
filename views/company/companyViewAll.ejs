@@ -6,13 +6,25 @@
         <p>
             <a href="/">Back to Home</a>
         </p>
+
         <h1>Companies</h1>
+
+        <form action="/company/add">
+            <input type="submit" value="Add New Company"/>
+        </form>
+
+        <br />
+
         <table border="1">
-            <tr><th>Company ID</th><th>Company Name</th></tr>
+            <tr><th>Company Name</th><th>Action</th></tr>
             <% for(var i=0; result.length > i; i++ ) { %>
             <tr>
-                <td><%= result[i].company_id%></td>
+                <!--<td><%= result[i].company_id%></td>-->
                 <td><a href="/company/?company_id=<%= result[i].company_id %>"><%= result[i].company_name %></a></td>
+                <td><form action="/company/delete">
+                        <input type="hidden" name="company_id" id="company_id" value="<%= result[i].company_id %>" />
+                        <input type="submit" value="Delete"/>
+                    </form></td>
             </tr>
             <% } %>
         </table>

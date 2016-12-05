@@ -6,12 +6,20 @@
         <p>
             <a href="/">Back to Home</a>
         </p>
+
         <h1>Addresses</h1>
+
+        <form action="/address/add">
+            <input type="submit" value="Add New Address"/>
+        </form>
+
+        <br />
+
         <table border="1">
-            <tr><th>Address ID</th><th>Street</th><th>Zip Code</th></tr>
+            <tr><th>Street</th><th>Zip Code</th><th>Action</th></tr>
             <% for(var i=0; result.length > i; i++ ) { %>
             <tr>
-                <td><%= result[i].address_id%></td>
+                <!--<td><%= result[i].address_id%></td>-->
                 <td><a href="/address/?address_id=<%= result[i].address_id %>"><%= result[i].street %></a></td>
                 <td><%= result[i].zip_code %></td>
             </tr>

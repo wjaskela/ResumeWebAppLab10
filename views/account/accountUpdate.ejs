@@ -1,0 +1,34 @@
+<html>
+<head>
+    <title>Update <%= account.first_name + ', ' + account.last_name%></title>
+</head>
+<body>
+<h1>Update <%= account.first_name + ', ' + account.last_name%></h1>
+<form action="/account/update" method="get">
+    <input type="hidden" id="account_id" name="account_id" value="<%= account.account_id %>">
+    First Name: <input id="first_name" name="first_name" type="text" value="<%= account.first_name%>"/>
+    <br />
+    <br />
+    Last Name: <input id="last_name" name="last_name" type="text" value="<%= account.last_name%>"/>
+    <br />
+    <br />
+    Email
+    <select id="email" name="email">
+        <% for(var i=0; account.length > i; i++ ) {
+            var selected = "";
+            if(account[i].account_id == resume.resume_id) {
+                selected = "selected";
+            }
+        %>
+        <option value="<%= account[i].account_id %>" <%= selected %>><%= account[i].first_name + ', ' + account[i].last_name %></option>
+        <% } %>
+    </select>
+
+    <br />
+
+    <input type="submit" />
+
+</form>
+</body>
+
+</html>

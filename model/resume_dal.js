@@ -42,3 +42,33 @@ exports.delete = function(resume_id, callback) {
         callback(err, result);
     });
 };
+
+exports.update = function(params, callback) {
+    var query = 'UPDATE resume SET name = ? WHERE resume_id = ?';
+    var queryData = [params.name];
+
+    connection.query(query, queryData, function(err, result) {
+        callback(err, result);
+    });
+};
+
+/*  Stored procedure used in this example
+ DROP PROCEDURE IF EXISTS resume_getinfo;
+ DELIMITER //
+ CREATE PROCEDURE resume_getinfo (resume_id int)
+ BEGIN
+ SELECT * FROM account WHERE resume_id = resume_id;
+ END //
+ DELIMITER ;
+ # Call the Stored Procedure
+ CALL resume_getinfo (4);
+ */
+
+exports.edit = function(resume_id, callback) {
+    var query = 'CALL resume_getinfo(?)';
+    var queryData = [resume_id];
+
+    connection.query(query, queryData, function(err, result) {
+        callback(err, result);
+    });
+};

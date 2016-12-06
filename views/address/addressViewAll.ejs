@@ -22,6 +22,10 @@
                 <!--<td><%= result[i].address_id%></td>-->
                 <td><a href="/address/?address_id=<%= result[i].address_id %>"><%= result[i].street %></a></td>
                 <td><%= result[i].zip_code %></td>
+                <td><form action="/address/delete">
+                        <input type="hidden" name="address_id" id="address_id" value="<%= result[i].address_id %>" />
+                        <input type="submit" value="Delete"/>
+                    </form></td>
             </tr>
             <% } %>
         </table>

@@ -55,9 +55,9 @@ exports.update = function(params, callback) {
 /*  Stored procedure used in this example
  DROP PROCEDURE IF EXISTS account_getinfo;
  DELIMITER //
- CREATE PROCEDURE account_getinfo (account_id int)
+ CREATE PROCEDURE account_getinfo (_account_id int)
  BEGIN
- SELECT * FROM account WHERE account_id = account_id;
+ SELECT * FROM account WHERE account_id = _account_id;
  END //
  DELIMITER ;
  # Call the Stored Procedure

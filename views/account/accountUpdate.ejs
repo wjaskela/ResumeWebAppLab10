@@ -16,11 +16,11 @@
     <select id="email" name="email">
         <% for(var i=0; account.length > i; i++ ) {
             var selected = "";
-            if(account[i].account_id == resume.resume_id) {
+            if(account[i].account_id == account.account_id) {
                 selected = "selected";
             }
         %>
-        <option value="<%= account[i].account_id %>" <%= selected %>><%= account[i].first_name + ', ' + account[i].last_name %></option>
+        <option value="<%= account[i].email %>" <%= selected %>><%= account[i].email %></option>
         <% } %>
     </select>
 

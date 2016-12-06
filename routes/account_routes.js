@@ -91,7 +91,7 @@ router.get('/edit2', function(req, res){
     else {
         account_dal.getById(req.query.account_id, function(err, school){
             account_dal.getAll(function(err, account) {
-                res.render('account/accountUpdate', {account: account[0], account: address});
+                res.render('account/accountUpdate', {account: account[0], account: account});
             });
         });
     }

@@ -44,8 +44,8 @@ exports.delete = function(resume_id, callback) {
 };
 
 exports.update = function(params, callback) {
-    var query = 'UPDATE resume SET name = ? WHERE resume_id = ?';
-    var queryData = [params.name];
+    var query = 'UPDATE resume SET resume_name = ? WHERE resume_id = ?';
+    var queryData = [params.resume_name, params.resume_id];
 
     connection.query(query, queryData, function(err, result) {
         callback(err, result);

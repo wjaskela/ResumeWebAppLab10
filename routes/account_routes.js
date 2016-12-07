@@ -78,6 +78,7 @@ router.get('/edit', function(req, res){
     }
     else {
         account_dal.edit(req.query.account_id, function(err, result){
+            console.log(result);
             res.render('account/accountUpdate', {account_id: result[0]});
         });
     }
@@ -89,11 +90,11 @@ router.get('/edit2', function(req, res){
         res.send('An account id is required');
     }
     else {
-        account_dal.getById(req.query.account_id, function(err, school){
-            account_dal.getAll(function(err, account) {
-                res.render('account/accountUpdate', {account: account[0], account: account});
+        account_dal.getById(req.query.account_id, function(err, account){
+            //account_dal.getAll(function(err, account) {
+                res.render('account/accountUpdate', {account: account[0]});
             });
-        });
+        //});
     }
 
 });

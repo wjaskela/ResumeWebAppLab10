@@ -69,6 +69,39 @@ router.get('/insert', function(req, res){
     }
 });
 
+router.get('/edit', function(req, res){
+    if(req.query.resume_id == null) {
+        res.send('A resume id is required');
+    }
+    else {
+        resume_dal.edit(req.query.resume_id, function(err, result){
+            console.log(result);
+            res.render('resume/resumeUpdate', {resume_id: result[0][0], account:result[1]});
+        });
+    }
+
+});
+
+router.get('/edit2', function(req, res){
+    if(req.query.resume_id == null) {
+        res.send('A resume id is required');
+    }
+    else {
+        resume_dal.getById(req.query.resume_id, function(err, resume){
+            resume_dal.getAll(function(err, account) {
+            res.render('resume/resumeUpdate', {resume: resume[0], account:account});
+        });
+        });
+    }
+
+});
+
+router.get('/update', function(req, res){
+    resume_dal.update(req.query, function(err, result){
+        res.redirect(302, '/resume/all');
+    });
+});
+
 // Delete a resume for the given account_id
 router.get('/delete', function(req, res){
     if(req.query.resume_id == null) {

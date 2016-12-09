@@ -55,10 +55,20 @@ router.get('/insert', function(req, res){
     else if(req.query.account_id == null) {
         res.send('An Account must be selected');
     }
+    else if(req.query.skill_id == null) {
+        res.send('At least one skill must be selected');
+    }
+    else if(req.query.company_id == null) {
+        res.send('At least one company must be selected');
+    }
+    else if(req.query.school_id == null) {
+        res.send('At least one school must be selected');
+    }
     else {
         // passing all the query parameters (req.query) to the insert function instead of each individually
         resume_dal.insert(req.query, function(err,result) {
             if (err) {
+                console.log(err)
                 res.send(err);
             }
             else {

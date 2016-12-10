@@ -11,13 +11,28 @@
     <br />
     Account Name
     <select id="account_id" name="account_id">
-        <% for(var i=0; account.length > i; i++ ) {
-            var selected = "";
+        <%
+            var noDups = [];
+            for(var i=0; account.length > i; i++ ) {
+                var selected = "";
+                var fname = account[i].first_name;
+                var lname = account[i].last_name;
+                var flname = fname + " " + lname;
+                if(noDups.indexOf(flname) == -1){
+                    //console.log("Adding %s" % (flname));
+                    noDups.push (flname);
+                }
+                else{
+                    //console.log ("Not adding");
+                    continue;
+                }
+            console.log (flname);
             if(account[i].account_id == resume.account_id) {
+                //console.log (flname);
                 selected = "selected";
             }
         %>
-        <option value="<%= account[i].account_id %>" <%= selected %>><%= account[i].first_name + ', ' + account[i].last_name %></option>
+        <option value="<%= account[i].account_id %>" <%= selected %>><%= flname %></option>
         <% } %>
     </select>
 

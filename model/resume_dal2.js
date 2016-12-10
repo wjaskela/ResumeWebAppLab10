@@ -5,8 +5,14 @@ var db  = require('./db_connection.js');
 var connection = mysql.createConnection(db.config);
 
 /*
- create or replace view resume_view as
- select r.*, c.company_name, sk.name, sc.school_name from resume r
+create or replace view resume_view as
+select r.*, a.first_name, a.last_name from resume r
+left join account a on a.account_id = r.account_id;
+*/
+
+/*
+ create or replace view resume_view2 as
+ select r.*, c.company_name, sk.name as skill_name, sc.school_name from resume r
  left join resume_company rc on rc.resume_id = r.resume_id
  left join company c on c.company_id = rc.company_id
  left join resume_skill rs on rs.resume_id = r.resume_id
@@ -23,8 +29,16 @@ exports.getAll = function(callback) {
     });
 };
 
+exports.getAll2 = function(callback) {
+    var query = 'SELECT * FROM resume_view2;';
+
+    connection.query(query, function(err, result) {
+        callback(err, result);
+    });
+};
+
 exports.getById = function(resume_id, callback) {
-    var query = 'SELECT * from resume_view WHERE r.resume_id = ?';
+    var query = 'SELECT * from resume_view WHERE resume_id = ?';
     var queryData = [resume_id];
     console.log(query);
 
@@ -43,29 +57,28 @@ exports.insert = function(params, callback) {
 
     connection.query(query, params.resume_name, function(err, result) {
 
-        // THEN USE THE RESUME_ID RETURNED AS insertId AND THE SELECTED ADDRESS_IDs INTO COMPANY_ADDRESS
+        // THEN USE THE COMPANY_ID RETURNED AS insertId AND THE SELECTED ADDRESS_IDs INTO COMPANY_ADDRESS
         var resume_id = result.insertId;
 
         // NOTE THAT THERE IS ONLY ONE QUESTION MARK IN VALUES ?
-        var query = 'INSERT INTO company_address (company_id, address_id) VALUES ?';
+        var query = 'INSERT INTO resume_skill (resume_id, skill_id) VALUES ?';
 
         // TO BULK INSERT RECORDS WE CREATE A MULTIDIMENSIONAL ARRAY OF THE VALUES
-        var companyAddressData = [];
-        for(var i=0; i < params.address_id.length; i++) {
-            companyAddressData.push([company_id, params.address_id[i]]);
+        var resumeSkillData = [];
+        for (var i = 0; i < params.skill_id.length; i++) {
+            resumeSkillData.push([resume_id, params.skill_id[i]]);
         }
 
-        // NOTE THE EXTRA [] AROUND companyAddressData
-        connection.query(query, [companyAddressData], function(err, result){
+        // NOTE THE EXTRA [] AROUND resumeSkillData
+        connection.query(query, [resumeSkillData], function (err, result) {
             callback(err, result);
         });
     });
-
 };
 
-exports.delete = function(company_id, callback) {
-    var query = 'DELETE FROM company WHERE company_id = ?';
-    var queryData = [company_id];
+exports.delete = function(resume_id, callback) {
+    var query = 'DELETE FROM resume WHERE resume_id = ?';
+    var queryData = [resume_id];
 
     connection.query(query, queryData, function(err, result) {
         callback(err, result);
@@ -74,46 +87,70 @@ exports.delete = function(company_id, callback) {
 };
 
 //declare the function so it can be used locally
-var companyAddressInsert = function(company_id, addressIdArray, callback){
+var resumeAccountInsert = function(resume_id, account_id, callback){
     // NOTE THAT THERE IS ONLY ONE QUESTION MARK IN VALUES ?
-    var query = 'INSERT INTO company_address (company_id, address_id) VALUES ?';
+    var query = 'INSERT INTO resume_skill (resume_id, skill_id) VALUES ?';
 
     // TO BULK INSERT RECORDS WE CREATE A MULTIDIMENSIONAL ARRAY OF THE VALUES
-    var companyAddressData = [];
-    for(var i=0; i < addressIdArray.length; i++) {
-        companyAddressData.push([company_id, addressIdArray[i]]);
+    var resumeSkillData = [];
+    for(var i=0; i < skillIdArray.length; i++) {
+        resumeSkillData.push([resume_id, skillIdArray[i]]);
     }
-    connection.query(query, [companyAddressData], function(err, result){
+    connection.query(query, [resumeSkillData], function(err, result){
         callback(err, result);
     });
 };
-//export the same function so it can be used by external callers
-module.exports.companyAddressInsert = companyAddressInsert;
 
 //declare the function so it can be used locally
-var companyAddressDeleteAll = function(company_id, callback){
-    var query = 'DELETE FROM company_address WHERE company_id = ?';
-    var queryData = [company_id];
+var resumeSkillInsert = function(resume_id, skillIdArray, callback){
+    // NOTE THAT THERE IS ONLY ONE QUESTION MARK IN VALUES ?
+    var query = 'INSERT INTO resume_skill (resume_id, skill_id) VALUES ?';
+
+    // TO BULK INSERT RECORDS WE CREATE A MULTIDIMENSIONAL ARRAY OF THE VALUES
+    var resumeSkillData = [];
+    for(var i=0; i < skillIdArray.length; i++) {
+        resumeSkillData.push([resume_id, skillIdArray[i]]);
+    }
+    connection.query(query, [resumeSkillData], function(err, result){
+        callback(err, result);
+    });
+};
+//export the same function so it can be used by external callers
+module.exports.resumeSkillInsert = resumeSkillInsert;
+
+//declare the function so it can be used locally
+var resumeSkillDeleteAll = function(resume_id, callback){
+    var query = 'DELETE FROM resume_skill WHERE resume_id = ?';
+    var queryData = [resume_id];
 
     connection.query(query, queryData, function(err, result) {
         callback(err, result);
     });
 };
 //export the same function so it can be used by external callers
-module.exports.companyAddressDeleteAll = companyAddressDeleteAll;
+module.exports.resumeSkillDeleteAll = resumeSkillDeleteAll;
 
 exports.update = function(params, callback) {
-    var query = 'UPDATE company SET company_name = ? WHERE company_id = ?';
-
-    var queryData = [params.company_name, params.company_id];
+    var query = 'UPDATE resume SET resume_name = ?, account_id = ? WHERE resume_id = ?';
+    var queryData = [params.resume_name, params.account_id, params.resume_id];
 
     connection.query(query, queryData, function(err, result) {
-        //delete company_address entries for this company
-        companyAddressDeleteAll(params.company_id, function(err, result){
+        callback(err, result);
+    });
+};
 
-            if(params.address_id != null) {
-                //insert company_address ids
-                companyAddressInsert(params.company_id, params.address_id, function(err, result){
+exports.update2 = function(params, callback) {
+    var query = 'UPDATE resume SET resume_name = ? WHERE resume_id = ?';
+
+    var queryData = [params.resume_name, params.resume_id];
+
+    connection.query(query, queryData, function(err, result) {
+        //delete resume_skill entries for this resume
+        resumeSkillDeleteAll(params.resume_id, function(err, result){
+
+            if(params.skill_id != null) {
+                //insert resume_skill ids
+                resumeSkillInsert(params.resume_id, params.skill_id, function(err, result){
                     callback(err, result);
                 });}
             else {
@@ -125,23 +162,23 @@ exports.update = function(params, callback) {
 };
 
 /*  Stored procedure used in this example
- DROP PROCEDURE IF EXISTS company_getinfo;
+ DROP PROCEDURE IF EXISTS resume_getinfo;
  DELIMITER //
- CREATE PROCEDURE company_getinfo (_company_id int)
+ CREATE PROCEDURE resume_getinfo (_resume_id int)
  BEGIN
- SELECT * FROM company WHERE company_id = _company_id;
- SELECT a.*, s.company_id FROM address a
- LEFT JOIN company_address s on s.address_id = a.address_id AND company_id = _company_id
- ORDER BY a.street, a.zip_code;
+ SELECT * FROM resume WHERE resume_id = _resume_id;
+ SELECT sk.*, rs.resume_id FROM skill sk
+ LEFT JOIN resume_skill rs on rs.skill_id = sk.skill_id AND resume_id = _resume_id
+ ORDER BY sk.name;
  END //
  DELIMITER ;
  # Call the Stored Procedure
- CALL company_getinfo (4);
+ CALL resume_getinfo (4);
  */
 
-exports.edit = function(company_id, callback) {
-    var query = 'CALL company_getinfo(?)';
-    var queryData = [company_id];
+exports.edit = function(resume_id, callback) {
+    var query = 'CALL resume_getinfo(?)';
+    var queryData = [resume_id];
 
     connection.query(query, queryData, function(err, result) {
         callback(err, result);

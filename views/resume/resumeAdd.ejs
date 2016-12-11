@@ -26,6 +26,7 @@
         <option value="<%= account[i].account_id %>"><%= flname %></option>
         <% } %>
     </select>
+
     <br />
     <br />
     Skill
@@ -48,6 +49,38 @@
     <script type="text/javascript">
         $(document).ready(function() {
             $('#skill_id').multiselect();
+        });
+    </script>
+
+    <br />
+    <br />
+    Company
+    <select id="company_id" name="company_id" multiple="multiple">
+        <% for(var i=0; company.length > i; i++ ) { %>
+        <option value="<%= company[i].company_id %>"><%= company[i].company_name %></option>
+        <% } %>
+    </select>
+
+    <!-- Initialize the multiselect plugin: -->
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#company_id').multiselect();
+        });
+    </script>
+
+    <br />
+    <br />
+    School
+    <select id="school_id" name="school_id" multiple="multiple">
+        <% for(var i=0; school.length > i; i++ ) { %>
+        <option value="<%= school[i].school_id %>"><%= school[i].school_name %></option>
+        <% } %>
+    </select>
+
+    <!-- Initialize the multiselect plugin: -->
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#school_id').multiselect();
         });
     </script>
 

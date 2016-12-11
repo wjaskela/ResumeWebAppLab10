@@ -3,6 +3,8 @@ var router = express.Router();
 var resume_dal = require('../model/resume_dal2');
 var account_dal = require('../model/account_dal');
 var skill_dal = require('../model/skill_dal');
+var company_dal = require('../model/company_dal');
+var school_dal = require('../model/school_dal');
 
 
 // View All resumes
@@ -41,13 +43,21 @@ router.get('/add', function(req, res){
     resume_dal.getAll2(function(err,result) {
         skill_dal.getAll(function (err, skill) {
             account_dal.getAll(function (err, account) {
-                if (err) {
-                    res.send('Undefined')
-                }
-                else {
-                    //res.send(skill);
-                    res.render('resume/resumeAdd', {account: account, skill: skill});
-                }
+                company_dal.getAll(function (err, company) {
+                    school_dal.getAll(function (err, school) {
+                        if (err) {
+                            res.send('Undefined')
+                        }
+                        else {
+                            res.render('resume/resumeAdd', {
+                                account: account,
+                                skill: skill,
+                                company: company,
+                                school: school
+                            });
+                        }
+                    });
+                });
             });
         });
     });
@@ -62,17 +72,6 @@ router.get('/insert', function(req, res){
     else if(req.query.account_id == null) {
         res.send('An Account must be selected');
     }
-    else if(req.query.skill_id == null) {
-        res.send('At least one skill must be selected');
-    }
-    /*
-    else if(req.query.company_id == null) {
-        res.send('At least one company must be selected');
-    }
-    else if(req.query.school_id == null) {
-        res.send('At least one school must be selected');
-    }
-    */
     else {
         // passing all the query parameters (req.query) to the insert function instead of each individually
         resume_dal.insert(req.query, function(err,result) {
@@ -93,12 +92,17 @@ router.get('/edit', function(req, res){
         res.send('A resume id is required');
     }
     else {
-        resume_dal.edit(req.query.resume_id, function(err, result){
+        resume_dal.edit(req.query.resume_id, function (err, result) {
             console.log(result);
-            res.render('resume/resumeUpdate', {resume_id: result[0][0], account:result[1]});
+            console.log(result.length);
+            //res.send (result);
+            account_dal.getAll(function (err, account) {
+                res.render('resume/resumeUpdate', {
+                    resume: result[0][0], account: account, company: result[2], skill: result[1], school: result[3]
+                });
+            });
         });
     }
-
 });
 
 router.get('/edit2', function(req, res){
@@ -122,7 +126,7 @@ router.get('/edit2', function(req, res){
 });
 
 router.get('/update', function(req, res){
-    resume_dal.update(req.query, function(err, result){
+    resume_dal.update2(req.query, function(err, result){
         res.redirect(302, '/resume/all');
     });
 });

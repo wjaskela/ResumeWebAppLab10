@@ -1,31 +1,29 @@
-<html>
-<head>
-    <title>Update <%= resume.resume_name%></title>
-</head>
-<body>
+<%- include("../includes/header.ejs", {title: "Update " + resume.resume_name}); %>
+
 <h1>Update <%= resume.resume_name%></h1>
 <form action="/resume/update" method="get">
     <input type="hidden" id="resume_id" name="resume_id" value="<%= resume.resume_id %>">
     Resume Name: <input id="resume_name" name="resume_name" type="text" value="<%= resume.resume_name%>"/>
+
     <br />
     <br />
     Account Name
     <select id="account_id" name="account_id">
         <%
-            var noDups = [];
-            for(var i=0; account.length > i; i++ ) {
-                var selected = "";
-                var fname = account[i].first_name;
-                var lname = account[i].last_name;
-                var flname = fname + " " + lname;
-                if(noDups.indexOf(flname) == -1){
-                    //console.log("Adding %s" % (flname));
-                    noDups.push (flname);
-                }
-                else{
-                    //console.log ("Not adding");
-                    continue;
-                }
+        var noDups = [];
+        for(var i=0; account.length > i; i++ ) {
+            var selected = "";
+            var fname = account[i].first_name;
+            var lname = account[i].last_name;
+            var flname = fname + " " + lname;
+            if(noDups.indexOf(flname) == -1){
+                //console.log("Adding %s" % (flname));
+                noDups.push (flname);
+            }
+            else{
+                //console.log ("Not adding");
+                continue;
+            }
             console.log (flname);
             if(account[i].account_id == resume.account_id) {
                 //console.log (flname);
@@ -37,10 +35,81 @@
     </select>
 
     <br />
+    <br />
+    Skill
+    <select id="skill_id" name="skill_id" multiple="multiple">
+        <%  var noDups = [];
+        for(var i=0; skill.length > i; i++ ) {
+            var sk_name = skill[i].name;
+            if (noDups.indexOf(sk_name) == -1){
+                noDups.push (sk_name);
+            }
+            else{
+                continue;
+            }
+            var selected = "";
+            if(skill[i].resume_id != null) {
+                selected = "selected";
+            }
+        %>
+        <option value="<%= skill[i].skill_id %>" <%= selected %> ><%= sk_name %></option>
+        <% } %>
+    </select>
+
+    <!-- Initialize the multiselect plugin: -->
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#skill_id').multiselect();
+        });
+    </script>
+
+    <br />
+    <br />
+    Company
+    <select id="company_id" name="company_id" multiple="multiple">
+        <% for(var i=0; company.length > i; i++ ) {
+            var selected = "";
+            if(company[i].resume_id != null) {
+                selected = "selected";
+            }
+        %>
+        <option value="<%= company[i].company_id %>" <%= selected %> ><%= company[i].company_name %></option>
+        <% } %>
+    </select>
+
+    <!-- Initialize the multiselect plugin: -->
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#company_id').multiselect();
+        });
+    </script>
+
+    <br />
+    <br />
+    School
+    <select id="school_id" name="school_id" multiple="multiple">
+        <% for(var i=0; school.length > i; i++ ) {
+            var selected = "";
+            if(school[i].resume_id != null) {
+                selected = "selected";
+            }
+        %>
+        <option value="<%= school[i].school_id %>" <%= selected %> ><%= school[i].school_name %></option>
+        <% } %>
+    </select>
+
+    <!-- Initialize the multiselect plugin: -->
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#school_id').multiselect();
+        });
+    </script>
+
+    <br />
+    <br />
 
     <input type="submit" />
 
 </form>
-</body>
 
-</html>
+<%- include("../includes/footer.ejs"); %>

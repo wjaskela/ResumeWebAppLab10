@@ -51,13 +51,14 @@ exports.getById = function(resume_id, callback) {
 exports.insert = function(params, callback) {
 
     // FIRST INSERT THE RESUME
-    var query = 'INSERT INTO resume (resume_name) VALUES (?)';
+    var query = 'INSERT INTO resume (resume_name, account_id) VALUES (?, ?)';
 
-    var queryData = [params.resume_name];
+    var queryData = [params.resume_name, params.account_id];
 
-    connection.query(query, params.resume_name, function(err, result) {
+    connection.query(query, queryData, function(err, result) {
+        console.log (result);
 
-        // THEN USE THE COMPANY_ID RETURNED AS insertId AND THE SELECTED ADDRESS_IDs INTO COMPANY_ADDRESS
+        // THEN USE THE RESUME_ID RETURNED AS insertId AND THE SELECTED SKILL_IDs INTO RESUME_SKILL
         var resume_id = result.insertId;
 
         // NOTE THAT THERE IS ONLY ONE QUESTION MARK IN VALUES ?
@@ -72,6 +73,7 @@ exports.insert = function(params, callback) {
         // NOTE THE EXTRA [] AROUND resumeSkillData
         connection.query(query, [resumeSkillData], function (err, result) {
             callback(err, result);
+            console.log (err);
         });
     });
 };

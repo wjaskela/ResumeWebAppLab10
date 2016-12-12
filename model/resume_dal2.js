@@ -80,14 +80,18 @@ exports.insert = function(params, callback) {
 
         // TO BULK INSERT RECORDS WE CREATE A MULTIDIMENSIONAL ARRAY OF THE VALUES
         var resumeCompanyData = [];
-        for (var i = 0; i < params.company_id.length; i++) {
-            resumeCompanyData.push([resume_id, params.company_id[i]]);
+        if (params.company_id != null) {
+            for (var i = 0; i < params.company_id.length; i++) {
+                resumeCompanyData.push([resume_id, params.company_id[i]]);
+            }
         }
 
         // TO BULK INSERT RECORDS WE CREATE A MULTIDIMENSIONAL ARRAY OF THE VALUES
         var resumeSchoolData = [];
-        for (var i = 0; i < params.school_id.length; i++) {
-            resumeSchoolData.push([resume_id, params.school_id[i]]);
+        if (params.school_id != null) {
+            for (var i = 0; i < params.school_id.length; i++) {
+                resumeSchoolData.push([resume_id, params.school_id[i]]);
+            }
         }
 
         // NOTE THE EXTRA [] AROUND resumeSkillData
@@ -198,6 +202,9 @@ module.exports.resumeSchoolInsert = resumeSchoolInsert;
 var resumeSchoolDeleteAll = function(resume_id, callback){
     var query = 'DELETE FROM resume_school WHERE resume_id = ?';
     var queryData = [resume_id];
+
+    console.log('queryData');
+    console.log(queryData);
 
     connection.query(query, queryData, function(err, result) {
         callback(err, result);
